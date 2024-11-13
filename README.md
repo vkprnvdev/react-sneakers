@@ -1,1 +1,1 @@
-# React-sneakers
+# React Sneakers
