@@ -1,13 +1,1 @@
-{
-	"root": [
-		"./src/app.tsx",
-		"./src/app.interface.ts",
-		"./src/main.tsx",
-		"./src/vite-env.d.ts",
-		"./src/components/drawer.tsx",
-		"./src/components/header.tsx",
-		"./src/components/card/index.tsx",
-		"./src/components/cartitem/index.tsx"
-	],
-	"version": "5.6.3"
-}
+{"root":["./src/app.tsx","./src/app.interface.ts","./src/main.tsx","./src/vite-env.d.ts","./src/components/card/index.tsx","./src/components/cartitem/index.tsx","./src/components/drawer/index.tsx","./src/components/header/index.tsx"],"version":"5.6.3"}
