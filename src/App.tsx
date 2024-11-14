@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Card from './components/Card'
-import Header from './components/Header.js'
-import Drawer from './components/Drawer.js'
+import Header from './components/Header'
+import Drawer from './components/Drawer'
 import { Items } from './app.interface.js'
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
 
 	useEffect(() => {
 		const api = 'https://271ea91daf28a18b.mokky.dev/items'
+		// const api = 'https://271ea91daf28a18b.mokky.dev/items-gh-pages'
 		axios.get(api).then(res => {
 			setItems(res.data)
 		})
@@ -27,20 +28,24 @@ function App() {
 
 	return (
 		<>
-			<div className='wrapper clear'>
+			<div className='wrapper'>
 				{cartOpened && (
 					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
 				)}
 				<Header onCart={() => setCartOpened(true)} />
-				<div className='content p-40'>
-					<div className='d-flex align-center justify-between mb-40'>
+				<div className='content'>
+					<div className='filter'>
 						<h1>Все кроссовки</h1>
-						<div className='search-block d-flex'>
-							<img src='/img/search.svg' alt='Search' />
+						<div>
+							<img
+								width={20}
+								src='/react-sneakers/img/search.svg'
+								alt='Search'
+							/>
 							<input placeholder='Поиск...' />
 						</div>
 					</div>
-					<div className='d-flex flex-wrap'>
+					<div className='cards'>
 						{items?.map((item: Items) => (
 							<Card
 								key={item.id}

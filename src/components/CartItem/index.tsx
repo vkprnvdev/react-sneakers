@@ -11,13 +11,13 @@ function CartItem({ title, price, imageUrl }: Items) {
 					}}
 					className={styles.cartItemImg}
 				></div>
-				<div className='mr-20 flex'>
-					<p className='mb-5'>{title}</p>
+				<div className={styles.text}>
+					<p>{title}</p>
 					<b>{price} руб.</b>
 				</div>
 				<img
 					className={styles.removeBtn}
-					src='/img/btn-remove.svg'
+					src='/react-sneakers/img/btn-remove.svg'
 					alt='Remove'
 				/>
 			</div>

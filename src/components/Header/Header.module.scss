@@ -1,0 +1,52 @@
+.header {
+	border-bottom: 1px solid #eaeaea;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 40px;
+
+	img {
+		margin-right: 15px;
+	}
+
+	div {
+		display: flex;
+		align-items: center;
+
+		div {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		h3 {
+			text-transform: uppercase;
+			margin: 0;
+		}
+		p {
+			opacity: 5;
+			margin: 0;
+		}
+	}
+
+	ul {
+		display: flex;
+		justify-content: space-between;
+		background: blue;
+
+		li {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.cart {
+			margin-right: 30px;
+			cursor: pointer;
+			background: red;
+
+			span {
+				font-size: 17px;
+			}
+		}
+	}
+}

@@ -1,7 +1,8 @@
-// import { useState } from 'react'
+import styles from './Drawer.module.scss'
+
 import { MouseEventHandler } from 'react'
-import { Items } from '../app.interface'
-import CartItem from './CartItem'
+import { Items } from '../../app.interface'
+import CartItem from '../CartItem'
 
 interface IDrawer {
 	onClose: MouseEventHandler<HTMLImageElement>
@@ -13,19 +14,19 @@ function Drawer({ onClose, items = [] }: IDrawer) {
 
 	return (
 		<>
-			<div className='overlay'>
-				<div className='drawer d-flex flex-column'>
-					<h2 className='d-flex justify-between mb-30'>
+			<div className={styles.overlay}>
+				<div className={styles.backend} onClick={onClose}></div>
+				<div className={styles.drawer}>
+					<h2>
 						Корзина
 						<img
-							className='cu-p'
-							src='/img/btn-remove.svg'
+							src='/react-sneakers/img/btn-remove.svg'
 							alt='Remove'
 							onClick={onClose}
 						/>
 					</h2>
 
-					<div className='items'>
+					<div className={styles.items}>
 						{items.map(item => (
 							<CartItem
 								key={item.id}
@@ -36,21 +37,22 @@ function Drawer({ onClose, items = [] }: IDrawer) {
 							/>
 						))}
 					</div>
-					<div className='cartTotalBlock'>
+					<div className={styles.cartTotalBlock}>
 						<ul>
-							<li className='d-flex'>
+							<li>
 								<span>Итого:</span>
 								<div></div>
 								<b>69 руб.</b>
 							</li>
-							<li className='d-flex'>
+							<li>
 								<span>Налог 5%:</span>
 								<div></div>
 								<b>1074 руб.</b>
 							</li>
 						</ul>
-						<button className='greenButton'>
-							Оформить заказ <img src='/img/arrow.svg' alt='Arrow' />
+						<button className={styles.greenButton}>
+							Оформить заказ{' '}
+							<img src='/react-sneakers/img/arrow.svg' alt='Arrow' />
 						</button>
 					</div>
 				</div>
