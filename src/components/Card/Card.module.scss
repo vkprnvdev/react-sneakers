@@ -1,4 +1,7 @@
+@use 'sass:color';
+
 .card {
+	user-select: none;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -16,8 +19,36 @@
 		transform: translateY(-5px);
 	}
 
-	.plus {
-		cursor: pointer;
+	.btn {
+		// border-radius: 50%;
+		// background: red;
+
+		span {
+			// position: absolute;
+			height: 25px;
+			width: 80px;
+			display: flex;
+			justify-content: space-between;
+			align-items: end;
+
+			div {
+				// background: red;
+				border-radius: 50%;
+				cursor: pointer;
+				z-index: 1;
+			}
+
+			h3 {
+				text-align: center;
+				margin-bottom: 2px;
+				font-size: 15px;
+				flex: 1;
+			}
+		}
+
+		.addCard {
+			cursor: pointer;
+		}
 	}
 
 	.favorite {
@@ -31,10 +62,12 @@
 	}
 
 	b {
+		user-select: text;
 		font-size: 13px;
 	}
 
 	h5 {
+		user-select: text;
 		font-weight: 400;
 		font-size: 14px;
 	}
@@ -42,7 +75,7 @@
 	.add {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: end;
 
 		div {
 			display: flex;

@@ -5,4 +5,5 @@ export interface Items {
 	title: string
 	price: number
 	imageUrl: string
+	count: number
 }

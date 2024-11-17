@@ -1,6 +1,6 @@
 import styles from './Drawer.module.scss'
 
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import { Items } from '../../app.interface'
 import CartItem from '../CartItem'
 
@@ -10,7 +10,15 @@ interface IDrawer {
 }
 
 function Drawer({ onClose, items = [] }: IDrawer) {
-	// const [total, setTotal] = useState(0)
+	const [total, setTotal] = useState<number>(0)
+
+	useEffect(() => {
+		let count = 0
+		items.map(item => {
+			count = count + item.price*item.count
+		})
+		setTotal(count)
+	}, [items])
 
 	return (
 		<>
@@ -34,20 +42,21 @@ function Drawer({ onClose, items = [] }: IDrawer) {
 								title={item.title}
 								price={item.price}
 								imageUrl={item.imageUrl}
+								count={item.count}
 							/>
 						))}
 					</div>
 					<div className={styles.cartTotalBlock}>
 						<ul>
 							<li>
-								<span>Итого:</span>
+								<span>Скидка 5%:</span>
 								<div></div>
-								<b>69 руб.</b>
+								<b>{(total * 0.05).toFixed(2)} руб.</b>
 							</li>
 							<li>
-								<span>Налог 5%:</span>
+								<span>Итого:</span>
 								<div></div>
-								<b>1074 руб.</b>
+								<b>{(total - total * 0.05).toFixed(2)} руб.</b>
 							</li>
 						</ul>
 						<button className={styles.greenButton}>

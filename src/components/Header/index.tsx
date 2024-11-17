@@ -30,7 +30,7 @@ function Header({ onCart }: IHeader) {
 							src='/react-sneakers/img/cart.svg'
 							alt='cart'
 						/>
-						<span>1205 руб.</span>
+						<b>1205 руб.</b>
 					</li>
 					<li className={styles.profile}>
 						<img

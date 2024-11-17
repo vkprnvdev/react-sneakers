@@ -18,12 +18,28 @@ function App() {
 		})
 	}, [])
 
-	const onAddToCart = (obj: Items, isAdded: Function) => {
-		if (isAdded) {
-			setCartItems(prev => prev.filter(item => item.id !== obj.id))
-		} else {
-			setCartItems(prev => [...prev, obj])
-		}
+	const onFirstAddToCart = (obj: Items) => {
+		setCartItems(prev => [...prev, obj])
+	}
+
+	const onAddToCart = (obj: Items) => {
+		setCartItems(prev =>
+			prev.map(item =>
+				item.id === obj.id ? { ...item, count: item.count + 1 } : item
+			)
+		)
+	}
+
+	const onLastRemoveFromCart = (obj: Items) => {
+		setCartItems(prev => prev.filter(item => item.id !== obj.id))
+	}
+
+	const onRemoveFromCart = (obj: Items) => {
+		setCartItems(prev =>
+			prev.map(item =>
+				item.id === obj.id ? { ...item, count: item.count - 1 } : item
+			)
+		)
 	}
 
 	return (
@@ -55,9 +71,10 @@ function App() {
 								imageUrl={item.imageUrl}
 								onFavorite={() => console.log(cartItems)}
 								// onFavorite={() => alert('favorite')}
-								onPlus={(obj: Items, isAdded: Function) =>
-									onAddToCart(obj, isAdded)
-								}
+								onFirstPlus={(obj: Items) => onFirstAddToCart(obj)}
+								onPlus={(obj: Items) => onAddToCart(obj)}
+								onLastMinus={(obj: Items) => onLastRemoveFromCart(obj)}
+								onMinus={(obj: Items) => onRemoveFromCart(obj)}
 							/>
 						))}
 					</div>
