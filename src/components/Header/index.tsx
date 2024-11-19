@@ -1,12 +1,11 @@
 import styles from './Header.module.scss'
-import { MouseEventHandler } from 'react'
+import { FC, MouseEventHandler } from 'react'
 
 interface IHeader {
 	onCart: MouseEventHandler<HTMLLIElement>
 }
 
-function Header({ onCart }: IHeader) {
-	// function Header({...props, onCart }: IHeader): FC<MouseEventHandler<HTMLLIElement>> {
+const Header: FC<IHeader> = ({ onCart }) => {
 	return (
 		<>
 			<div className={styles.header}>
@@ -30,7 +29,7 @@ function Header({ onCart }: IHeader) {
 							src='/react-sneakers/img/cart.svg'
 							alt='cart'
 						/>
-						<b>1205 руб.</b>
+						{/* <b>1205 руб.</b> */}
 					</li>
 					<li className={styles.profile}>
 						<img

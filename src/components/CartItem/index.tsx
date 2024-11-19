@@ -1,7 +1,8 @@
+import { FC } from 'react'
 import { Items } from '../../app.interface'
 import styles from './CartItem.module.scss'
 
-function CartItem({ title, price, imageUrl, count }: Items) {
+const CartItem: FC<Items> = ({ title, price, imageUrl, count }) => {
 	return (
 		<>
 			<div className={styles.cartItem}>

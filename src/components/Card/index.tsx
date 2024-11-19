@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import styles from './Card.module.scss'
 import { Plus, Minus } from 'lucide-react'
 
@@ -14,7 +14,7 @@ interface ICard {
 	onFavorite: Function
 }
 
-function Card({
+const Card: FC<ICard> = ({
 	id,
 	title,
 	imageUrl,
@@ -24,7 +24,7 @@ function Card({
 	onLastMinus,
 	onMinus,
 	onFavorite,
-}: ICard) {
+}) => {
 	const [isAdded, setIsAdded] = useState(false)
 	const [count, setCount] = useState<number>(1)
 	const [isFavorite, setIsFavorite] = useState(false)

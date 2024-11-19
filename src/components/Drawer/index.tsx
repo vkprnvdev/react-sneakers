@@ -1,6 +1,6 @@
 import styles from './Drawer.module.scss'
 
-import { MouseEventHandler, useEffect, useState } from 'react'
+import { FC, MouseEventHandler, useEffect, useState } from 'react'
 import { Items } from '../../app.interface'
 import CartItem from '../CartItem'
 
@@ -9,13 +9,13 @@ interface IDrawer {
 	items: Items[]
 }
 
-function Drawer({ onClose, items = [] }: IDrawer) {
+const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 	const [total, setTotal] = useState<number>(0)
 
 	useEffect(() => {
 		let count = 0
 		items.map(item => {
-			count = count + item.price*item.count
+			count = count + item.price * item.count
 		})
 		setTotal(count)
 	}, [items])

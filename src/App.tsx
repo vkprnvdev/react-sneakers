@@ -46,7 +46,10 @@ function App() {
 		<>
 			<div className='wrapper'>
 				{cartOpened && (
-					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
+					<Drawer
+						onClose={() => setCartOpened(false)}
+						items={cartItems}
+					/>
 				)}
 				<Header onCart={() => setCartOpened(true)} />
 				<div className='content'>
