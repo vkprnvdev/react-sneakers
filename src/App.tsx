@@ -1,85 +1,120 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { Delete } from 'lucide-react'
 import Card from './components/Card'
 import Header from './components/Header'
 import Drawer from './components/Drawer'
 import { Items } from './app.interface.js'
+import { API } from './api.service.js'
 
 function App() {
 	const [items, setItems] = useState<Items[]>([])
 	const [cartItems, setCartItems] = useState<Items[]>([])
 	const [cartOpened, setCartOpened] = useState<boolean>(false)
+	const [searchValue, setSearchValue] = useState<string>('')
+
+	const api_items = 'https://271ea91daf28a18b.mokky.dev/items/'
+	const api_cart = 'https://271ea91daf28a18b.mokky.dev/cart/'
+
+	const api = new API()
 
 	useEffect(() => {
-		const api = 'https://271ea91daf28a18b.mokky.dev/items'
-		// const api = 'https://271ea91daf28a18b.mokky.dev/items-gh-pages'
-		axios.get(api).then(res => {
-			setItems(res.data)
-		})
+		api.setFromApi(api_cart, setCartItems)
+		api.setFromApi(api_items, setItems)
 	}, [])
 
-	const onFirstAddToCart = (obj: Items) => {
-		setCartItems(prev => [...prev, obj])
-	}
+	cartItems.map(cartItem => {
+		items.map((item: Items) => {
+			if (item.id === cartItem.id) {
+				item.count = cartItem.count
+			}
+		})
+	})
 
-	const onAddToCart = (obj: Items) => {
-		setCartItems(prev =>
-			prev.map(item =>
-				item.id === obj.id ? { ...item, count: item.count + 1 } : item
+	const onAddToCart = (obj: Items, isAdded: boolean) => {
+		console.log(obj)
+		if (!isAdded) {
+			setCartItems(prev => [...prev, obj])
+			api.post(api_cart, obj)
+		} else {
+			setCartItems(prev =>
+				prev.map(item =>
+					item.id === obj.id ? { ...item, count: item.count + 1 } : item
+				)
 			)
-		)
-	}
-
-	const onLastRemoveFromCart = (obj: Items) => {
-		setCartItems(prev => prev.filter(item => item.id !== obj.id))
+			api.patch(api_cart, obj.id, { count: obj.count + 1 })
+		}
 	}
 
 	const onRemoveFromCart = (obj: Items) => {
-		setCartItems(prev =>
-			prev.map(item =>
-				item.id === obj.id ? { ...item, count: item.count - 1 } : item
+		if (obj.count === 1) {
+			setCartItems(prev => prev.filter(item => item.id !== obj.id))
+			api.delete(api_cart, obj.id)
+		} else {
+			setCartItems(prev =>
+				prev.map(item =>
+					item.id === obj.id ? { ...item, count: item.count - 1 } : item
+				)
 			)
-		)
+			api.patch(api_cart, obj.id, { count: obj.count - 1 })
+		}
 	}
 
 	return (
 		<>
 			<div className='wrapper'>
 				{cartOpened && (
-					<Drawer
-						onClose={() => setCartOpened(false)}
-						items={cartItems}
-					/>
+					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
 				)}
 				<Header onCart={() => setCartOpened(true)} />
 				<div className='content'>
 					<div className='filter'>
-						<h1>Все кроссовки</h1>
-						<div>
+						<h1>
+							{searchValue
+								? `Поиск по запросу: "${searchValue}"`
+								: 'Все кроссовки'}
+						</h1>
+						<div className='searchBlock'>
 							<img
 								width={20}
 								src='/react-sneakers/img/search.svg'
 								alt='Search'
 							/>
-							<input placeholder='Поиск...' />
+							<input
+								onChange={event => setSearchValue(event.target.value)}
+								value={searchValue}
+								placeholder='Поиск...'
+							/>
+							{searchValue && (
+								<Delete
+									className='clear'
+									width={25}
+									height={25}
+									color='#e4e4e4'
+									onClick={() => setSearchValue('')}
+								/>
+							)}
 						</div>
 					</div>
 					<div className='cards'>
-						{items?.map((item: Items) => (
-							<Card
-								key={item.id}
-								id={item.id}
-								title={item.title}
-								price={item.price}
-								imageUrl={item.imageUrl}
-								onFavorite={() => console.log(cartItems)}
-								// onFavorite={() => alert('favorite')}
-								onFirstPlus={(obj: Items) => onFirstAddToCart(obj)}
-								onPlus={(obj: Items) => onAddToCart(obj)}
-								onLastMinus={(obj: Items) => onLastRemoveFromCart(obj)}
-								onMinus={(obj: Items) => onRemoveFromCart(obj)}
-							/>
-						))}
+						{items
+							.filter(item =>
+								item.title.toLowerCase().includes(searchValue.toLowerCase())
+							)
+							?.map((item: Items, index) => (
+								<Card
+									key={index}
+									id={item.id}
+									title={item.title}
+									price={item.price}
+									imageUrl={item.imageUrl}
+									countItem={item.count}
+									onFavorite={() => console.log(cartItems)}
+									onPlus={(obj: Items, isAdded: boolean) =>
+										onAddToCart(obj, isAdded)
+									}
+									onMinus={(obj: Items) => onRemoveFromCart(obj)}
+								/>
+							))}
 					</div>
 				</div>
 			</div>

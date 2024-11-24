@@ -47,10 +47,13 @@ li {
 
 		h1 {
 			margin: 0;
+			cursor: pointer;
 		}
 
 		div {
 			display: flex;
+			justify-content: space-between;
+			align-items: center;
 			border: 1px solid #f3f3f3;
 			border-radius: 10px;
 			padding: 0 15px;
@@ -60,6 +63,10 @@ li {
 				padding: 13px;
 				font-size: 18px;
 				width: 200px;
+			}
+
+			.clear {
+				cursor: pointer;
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styles from './Card.module.scss'
 import { Plus, Minus } from 'lucide-react'
 
@@ -7,9 +7,8 @@ interface ICard {
 	title: string
 	imageUrl: string
 	price: number
-	onFirstPlus: Function
+	countItem: number
 	onPlus: Function
-	onLastMinus: Function
 	onMinus: Function
 	onFavorite: Function
 }
@@ -19,9 +18,8 @@ const Card: FC<ICard> = ({
 	title,
 	imageUrl,
 	price,
-	onFirstPlus,
+	countItem,
 	onPlus,
-	onLastMinus,
 	onMinus,
 	onFavorite,
 }) => {
@@ -29,19 +27,26 @@ const Card: FC<ICard> = ({
 	const [count, setCount] = useState<number>(1)
 	const [isFavorite, setIsFavorite] = useState(false)
 
+	useEffect(() => {
+		if (countItem > 0) {
+			setIsAdded(true)
+			setCount(countItem)
+		}
+	}, [])
+
 	const onFirstClickPlus = () => {
-		onFirstPlus({ id, title, imageUrl, price, count })
+		onPlus({ id, title, imageUrl, price, count }, isAdded)
 		setIsAdded(!isAdded)
 	}
 
 	const onClickPlus = () => {
 		setCount(prev => prev + 1)
-		onPlus({ id, title, imageUrl, price, count })
+		onPlus({ id, title, imageUrl, price, count }, isAdded)
 	}
 
 	const onLastClickMinus = () => {
-		onLastMinus({ id, title, imageUrl, price, count })
 		setIsAdded(!isAdded)
+		onMinus({ id, title, imageUrl, price, count })
 	}
 
 	const onClickMinus = () => {
@@ -84,16 +89,16 @@ const Card: FC<ICard> = ({
 						{isAdded ? (
 							<span>
 								<div onClick={count === 1 ? onLastClickMinus : onClickMinus}>
-									<Minus />
+									<Minus color='#9B9B9B' />
 								</div>
 								<h3>{count}</h3>
 								<div onClick={onClickPlus}>
-									<Plus />
+									<Plus color='#9B9B9B' />
 								</div>
 							</span>
 						) : (
 							<div className={styles.addCard} onClick={onFirstClickPlus}>
-								<Plus color='#9B9B9B' />
+								<Plus color='#CDCDCD' />
 							</div>
 						)}
 					</div>

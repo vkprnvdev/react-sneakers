@@ -1,7 +1,5 @@
-type ItemId = number
-
 export interface Items {
-	id: ItemId
+	id: number
 	title: string
 	price: number
 	imageUrl: string

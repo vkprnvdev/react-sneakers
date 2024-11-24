@@ -35,9 +35,9 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 					</h2>
 
 					<div className={styles.items}>
-						{items.map(item => (
+						{items.map((item, index) => (
 							<CartItem
-								key={item.id}
+								key={index}
 								id={item.id}
 								title={item.title}
 								price={item.price}
