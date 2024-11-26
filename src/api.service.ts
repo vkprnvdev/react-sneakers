@@ -2,9 +2,15 @@ import axios from 'axios'
 import { Items } from './app.interface'
 
 export class API {
-	public setFromApi = async (path: string, setCartItems: Function) => {
+	api: string
+
+	constructor(api: string) {
+		this.api = api
+	}
+
+	public setFromApi = async (setCartItems: Function) => {
 		try {
-			await axios.get(path).then(res => {
+			await axios.get(this.api).then(res => {
 				setCartItems(res.data)
 			})
 		} catch (err) {
@@ -12,28 +18,28 @@ export class API {
 		}
 	}
 
-	public post = async (path: string, obj: Items) => {
+	public post = async (obj: Items) => {
 		try {
-			const res = await axios.post(path, obj)
-			await axios.patch(path + res.data.id, { id: obj.id })
+			const res = await axios.post(this.api, obj)
+			await axios.patch(this.api + res.data.id, { id: obj.id })
 			return res.data
 		} catch (err) {
 			console.error(err)
 		}
 	}
 
-	public patch = async (path: string, id: number, obj: object) => {
+	public patch = async (id: number, obj: object) => {
 		try {
-			const res = await axios.patch(path + id, obj)
+			const res = await axios.patch(this.api + id, obj)
 			return res.data
 		} catch (err) {
 			console.error(err)
 		}
 	}
 
-	public delete = async (path: string, id: number) => {
+	public delete = async (id: number) => {
 		try {
-			const res = await axios.delete(path + id)
+			const res = await axios.delete(this.api + id)
 			return res.data
 		} catch (err) {
 			console.error(err)

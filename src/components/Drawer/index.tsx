@@ -2,14 +2,16 @@ import styles from './Drawer.module.scss'
 
 import { FC, MouseEventHandler, useEffect, useState } from 'react'
 import { Items } from '../../app.interface'
+import { X } from 'lucide-react'
 import CartItem from '../CartItem'
 
 interface IDrawer {
-	onClose: MouseEventHandler<HTMLImageElement>
+	onClose: MouseEventHandler<SVGSVGElement & HTMLDivElement>
 	items: Items[]
+	onMinus: Function
 }
 
-const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
+const Drawer: FC<IDrawer> = ({ onClose, items = [], onMinus }) => {
 	const [total, setTotal] = useState<number>(0)
 
 	useEffect(() => {
@@ -27,9 +29,12 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 				<div className={styles.drawer}>
 					<h2>
 						Корзина
-						<img
-							src='/react-sneakers/img/btn-remove.svg'
-							alt='Remove'
+						<X
+							className={styles.X}
+							color='#9B9B9B'
+							strokeWidth={3}
+							width={30}
+							height={30}
 							onClick={onClose}
 						/>
 					</h2>
@@ -43,6 +48,7 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 								price={item.price}
 								imageUrl={item.imageUrl}
 								count={item.count}
+								onMinus={onMinus}
 							/>
 						))}
 					</div>

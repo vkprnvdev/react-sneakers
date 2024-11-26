@@ -12,14 +12,15 @@ function App() {
 	const [cartOpened, setCartOpened] = useState<boolean>(false)
 	const [searchValue, setSearchValue] = useState<string>('')
 
-	const api_items = 'https://271ea91daf28a18b.mokky.dev/items/'
-	const api_cart = 'https://271ea91daf28a18b.mokky.dev/cart/'
+	// const api_items = 'https://271ea91daf28a18b.mokky.dev/items/'
+	// const api_cart = 'https://271ea91daf28a18b.mokky.dev/cart/'
 
-	const api = new API()
+	const api_items = new API('https://271ea91daf28a18b.mokky.dev/items/')
+	const api_cart = new API('https://271ea91daf28a18b.mokky.dev/cart/')
 
 	useEffect(() => {
-		api.setFromApi(api_cart, setCartItems)
-		api.setFromApi(api_items, setItems)
+		api_cart.setFromApi(setCartItems)
+		api_items.setFromApi(setItems)
 	}, [])
 
 	cartItems.map(cartItem => {
@@ -31,31 +32,30 @@ function App() {
 	})
 
 	const onAddToCart = (obj: Items, isAdded: boolean) => {
-		console.log(obj)
 		if (!isAdded) {
 			setCartItems(prev => [...prev, obj])
-			api.post(api_cart, obj)
+			api_cart.post(obj)
 		} else {
 			setCartItems(prev =>
 				prev.map(item =>
 					item.id === obj.id ? { ...item, count: item.count + 1 } : item
 				)
 			)
-			api.patch(api_cart, obj.id, { count: obj.count + 1 })
+			api_cart.patch(obj.id, { count: obj.count + 1 })
 		}
 	}
 
 	const onRemoveFromCart = (obj: Items) => {
 		if (obj.count === 1) {
 			setCartItems(prev => prev.filter(item => item.id !== obj.id))
-			api.delete(api_cart, obj.id)
+			api_cart.delete(obj.id)
 		} else {
 			setCartItems(prev =>
 				prev.map(item =>
 					item.id === obj.id ? { ...item, count: item.count - 1 } : item
 				)
 			)
-			api.patch(api_cart, obj.id, { count: obj.count - 1 })
+			api_cart.patch(obj.id, { count: obj.count - 1 })
 		}
 	}
 
@@ -63,7 +63,11 @@ function App() {
 		<>
 			<div className='wrapper'>
 				{cartOpened && (
-					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
+					<Drawer
+						onClose={() => setCartOpened(false)}
+						items={cartItems}
+						onMinus={(obj: Items) => onRemoveFromCart(obj)}
+					/>
 				)}
 				<Header onCart={() => setCartOpened(true)} />
 				<div className='content'>
@@ -98,7 +102,9 @@ function App() {
 					<div className='cards'>
 						{items
 							.filter(item =>
-								item.title.toLowerCase().includes(searchValue.toLowerCase())
+								item.title
+									.toLowerCase()
+									.includes(searchValue.toLowerCase().trim())
 							)
 							?.map((item: Items, index) => (
 								<Card
