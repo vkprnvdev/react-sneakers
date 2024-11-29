@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import styles from './Card.module.scss'
 import { Plus, Minus } from 'lucide-react'
+import CardPhoto from './CardPhoto'
 
 interface ICard {
 	id: number
@@ -26,6 +27,7 @@ const Card: FC<ICard> = ({
 	const [isAdded, setIsAdded] = useState(false)
 	const [count, setCount] = useState<number>(1)
 	const [isFavorite, setIsFavorite] = useState(false)
+	const [isPhotoOpened, setIsPhotoOpened] = useState(false)
 
 	useEffect(() => {
 		if (countItem > 0) {
@@ -59,8 +61,15 @@ const Card: FC<ICard> = ({
 		setIsFavorite(!isFavorite)
 	}
 
+	const onClickImg = () => {
+		setIsPhotoOpened(true)
+	}
+
 	return (
 		<>
+			{isPhotoOpened && (
+				<CardPhoto imageUrl={imageUrl} setIsPhotoOpened={setIsPhotoOpened} />
+			)}
 			<div className={styles.card}>
 				<div className={styles.favorite} onClick={onClickFavorite}>
 					<img
@@ -72,13 +81,16 @@ const Card: FC<ICard> = ({
 						alt='Unliked'
 					/>
 				</div>
-				<img
-					className='sneakers'
-					width={133}
-					height={112}
-					src={imageUrl}
-					alt='Sneakers'
-				/>
+				<div className={styles.img}>
+					<img
+						className={styles.sneakers}
+						width={160}
+						height={140}
+						src={imageUrl}
+						alt='Sneakers'
+						onClick={onClickImg}
+					/>
+				</div>
 				<h5>{title}</h5>
 				<div className={styles.add}>
 					<div>

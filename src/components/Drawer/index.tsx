@@ -8,10 +8,9 @@ import CartItem from '../CartItem'
 interface IDrawer {
 	onClose: MouseEventHandler<SVGSVGElement & HTMLDivElement>
 	items: Items[]
-	onMinus: Function
 }
 
-const Drawer: FC<IDrawer> = ({ onClose, items = [], onMinus }) => {
+const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 	const [total, setTotal] = useState<number>(0)
 
 	useEffect(() => {
@@ -43,12 +42,10 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [], onMinus }) => {
 						{items.map((item, index) => (
 							<CartItem
 								key={index}
-								id={item.id}
 								title={item.title}
 								price={item.price}
 								imageUrl={item.imageUrl}
 								count={item.count}
-								onMinus={onMinus}
 							/>
 						))}
 					</div>

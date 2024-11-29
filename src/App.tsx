@@ -55,6 +55,11 @@ function App() {
 					item.id === obj.id ? { ...item, count: item.count - 1 } : item
 				)
 			)
+			setItems(prev =>
+				prev.map(item =>
+					item.id === obj.id ? { ...item, count: item.count - 1 } : item
+				)
+			)
 			api_cart.patch(obj.id, { count: obj.count - 1 })
 		}
 	}
@@ -66,7 +71,6 @@ function App() {
 					<Drawer
 						onClose={() => setCartOpened(false)}
 						items={cartItems}
-						onMinus={(obj: Items) => onRemoveFromCart(obj)}
 					/>
 				)}
 				<Header onCart={() => setCartOpened(true)} />
