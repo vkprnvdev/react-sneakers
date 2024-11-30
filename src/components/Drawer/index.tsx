@@ -38,35 +38,50 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 						/>
 					</h2>
 
-					<div className={styles.items}>
-						{items.map((item, index) => (
-							<CartItem
-								key={index}
-								title={item.title}
-								price={item.price}
-								imageUrl={item.imageUrl}
-								count={item.count}
+					{items.length > 0 ? (
+						<div className={styles.items}>
+							{items.map((item, index) => (
+								<CartItem
+									key={index}
+									title={item.title}
+									price={item.price}
+									imageUrl={item.imageUrl}
+									count={item.count}
+								/>
+							))}
+						</div>
+					) : (
+						<div className={styles.cartEmpty}>
+							<img
+								src='/react-sneakers/img/empty-cart.jpg'
+								alt='cartEmpty'
+								width={120}
+								height={120}
 							/>
-						))}
-					</div>
-					<div className={styles.cartTotalBlock}>
-						<ul>
-							<li>
-								<span>Скидка 5%:</span>
-								<div></div>
-								<b>{(total * 0.05).toFixed(2)} руб.</b>
-							</li>
-							<li>
-								<span>Итого:</span>
-								<div></div>
-								<b>{(total - total * 0.05).toFixed(2)} руб.</b>
-							</li>
-						</ul>
-						<button className={styles.greenButton}>
-							Оформить заказ{' '}
-							<img src='/react-sneakers/img/arrow.svg' alt='Arrow' />
-						</button>
-					</div>
+							<h2>Корзина пустая</h2>
+							<p>Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
+						</div>
+					)}
+					{items.length > 0 && (
+						<div className={styles.cartTotalBlock}>
+							<ul>
+								<li>
+									<span>Скидка 5%:</span>
+									<div></div>
+									<b>{(total * 0.05).toFixed(2)} руб.</b>
+								</li>
+								<li>
+									<span>Итого:</span>
+									<div></div>
+									<b>{(total - total * 0.05).toFixed(2)} руб.</b>
+								</li>
+							</ul>
+							<button className={styles.greenButton}>
+								Оформить заказ{' '}
+								<img src='/react-sneakers/img/arrow.svg' alt='Arrow' />
+							</button>
+						</div>
+					)}
 				</div>
 			</div>
 		</>

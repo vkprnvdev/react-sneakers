@@ -48,6 +48,26 @@
       cursor: pointer;
     }
 	}
+
+	.cartEmpty {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		text-align: center;
+
+		img {
+			margin-bottom: 20px;
+		}
+		
+		p {
+			color: #999999;
+			width: 280px;
+			line-height: 24px;
+		}
+	}
 }
 
 .cartTotalBlock {

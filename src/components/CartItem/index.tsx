@@ -10,22 +10,13 @@ interface ICartItems {
 	count: number
 }
 
-const CartItem: FC<ICartItems> = ({
-	title,
-	price,
-	imageUrl,
-	count
-}) => {
-
+const CartItem: FC<ICartItems> = ({ title, price, imageUrl, count }) => {
 	return (
 		<>
 			<div className={styles.cartItem}>
-				<div
-					style={{
-						backgroundImage: `url(${imageUrl})`,
-					}}
-					className={styles.cartItemImg}
-				></div>
+				<div className={styles.cartItemImg}>
+					<img width={100} height={80} src={imageUrl} alt='Sneakers' />
+				</div>
 				<div className={styles.text}>
 					<b>x{count}</b>
 					<p>{title}</p>
