@@ -8,10 +8,10 @@ export class API {
 		this.api = api
 	}
 
-	public setFromApi = async (setCartItems: Function) => {
+	public setFromApi = async (array: Function) => {
 		try {
 			await axios.get(this.api).then(res => {
-				setCartItems(res.data)
+				array(res.data)
 			})
 		} catch (err) {
 			console.error(err)

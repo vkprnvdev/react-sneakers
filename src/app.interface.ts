@@ -4,4 +4,5 @@ export interface Items {
 	price: number
 	imageUrl: string
 	count: number
+	isFavorite: boolean
 }
