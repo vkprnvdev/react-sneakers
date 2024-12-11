@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Route } from 'react-router-dom'
 import { Delete } from 'lucide-react'
 import Card from './components/Card'
 import Header from './components/Header'
@@ -99,6 +100,9 @@ function App() {
 					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
 				)}
 				<Header onCart={() => setCartOpened(true)} />
+
+				{/* <Route path='react-sneakers/favorites'><h1>1234</h1></Route> */}
+
 				<div className='content'>
 					<div className='filter'>
 						<h1>
