@@ -1,5 +1,7 @@
+import { Link } from '@tanstack/react-router'
 import styles from './Header.module.scss'
 import { FC, MouseEventHandler } from 'react'
+import { Heart, ShoppingBag, CircleUserRound } from 'lucide-react'
 
 interface IHeader {
 	onCart: MouseEventHandler<HTMLLIElement>
@@ -10,34 +12,37 @@ const Header: FC<IHeader> = ({ onCart }) => {
 		<>
 			<div className={styles.header}>
 				<div>
-					<img
-						width={50}
-						height={50}
-						src='/react-sneakers/img/logo.png'
-						alt='logo'
-					/>
+					<Link to='/'>
+						<img width={50} height={50} src='/img/logo.png' alt='logo' />
+					</Link>
 					<div>
 						<h3>React Sneakers</h3>
 						<p>Магазин лучших кроссовок</p>
 					</div>
 				</div>
 				<ul>
+					<li className={styles.heart}>
+						<Link to='/favorites'>
+							<Heart width={35} height={35} color='#CDCDCD' strokeWidth={1.7} />
+						</Link>
+					</li>
 					<li className={styles.cart} onClick={onCart}>
-						<img
-							width={30}
-							height={30}
-							src='/react-sneakers/img/cart.svg'
-							alt='cart'
+						<ShoppingBag
+							width={35}
+							height={35}
+							color='#CDCDCD'
+							strokeWidth={1.7}
 						/>
-						{/* <b>1205 руб.</b> */}
 					</li>
 					<li className={styles.profile}>
-						<img
-							width={30}
-							height={30}
-							src='/react-sneakers/img/user_profile.svg'
-							alt='cart'
-						/>
+						<Link to='/profile'>
+							<CircleUserRound
+								width={35}
+								height={35}
+								color='#CDCDCD'
+								strokeWidth={1.7}
+							/>
+						</Link>
 					</li>
 				</ul>
 			</div>

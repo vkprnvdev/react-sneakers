@@ -32,21 +32,13 @@
 	ul {
 		display: flex;
 		justify-content: space-between;
+		gap: 70px;
 
 		li {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-		}
-		.cart {
-			margin-right: 30px;
 			cursor: pointer;
-
-			b {
-				font-size: 17px;
-				color: #9B9B9B;
-				text-decoration: underline;
-			}
 		}
 	}
 }

@@ -53,7 +53,7 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 					) : (
 						<div className={styles.cartEmpty}>
 							<img
-								src='/react-sneakers/img/empty-cart.jpg'
+								src='/img/empty-cart.jpg'
 								alt='cartEmpty'
 								width={120}
 								height={120}
@@ -78,7 +78,7 @@ const Drawer: FC<IDrawer> = ({ onClose, items = [] }) => {
 							</ul>
 							<button className={styles.greenButton}>
 								Оформить заказ{' '}
-								<img src='/react-sneakers/img/arrow.svg' alt='Arrow' />
+								<img src='/img/arrow.svg' alt='Arrow' />
 							</button>
 						</div>
 					)}

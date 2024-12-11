@@ -1,12 +1,17 @@
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Delete } from 'lucide-react'
-import Card from './components/Card'
-import Header from './components/Header'
-import Drawer from './components/Drawer'
-import { Items } from './app.interface.js'
-import { API } from './api.service.js'
+import Card from '../components/Card/index.js'
+import Header from '../components/Header/index.js'
+import Drawer from '../components/Drawer/index.js'
+import { Items } from '../app.interface.js'
+import { API } from '../api.service.js'
 
-function App() {
+export const Route = createLazyFileRoute('/')({
+	component: Index,
+})
+
+function Index() {
 	const [items, setItems] = useState<Items[]>([])
 	const [cartItems, setCartItems] = useState<Items[]>([])
 	const [favoriteItems, setFavoriteItems] = useState<Items[]>([])
@@ -109,7 +114,7 @@ function App() {
 						<div className='searchBlock'>
 							<img
 								width={20}
-								src='/react-sneakers/img/search.svg'
+								src='/img/search.svg'
 								alt='Search'
 							/>
 							<input
@@ -162,4 +167,4 @@ function App() {
 	)
 }
 
-export default App
+// export default Index

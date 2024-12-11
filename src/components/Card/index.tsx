@@ -77,11 +77,7 @@ const Card: FC<ICard> = ({
 			<div className={styles.card}>
 				<div className={styles.favorite} onClick={onClickFavorite}>
 					<img
-						src={
-							isFavorite
-								? '/react-sneakers/img/heart-liked.svg'
-								: '/react-sneakers/img/heart-unliked.svg'
-						}
+						src={isFavorite ? '/img/heart-liked.svg' : '/img/heart-unliked.svg'}
 						alt='Unliked'
 					/>
 				</div>
@@ -121,10 +117,7 @@ const Card: FC<ICard> = ({
 						</div>
 					) : (
 						<div>
-							<img
-								src='/react-sneakers/img/loading_circle.gif'
-								alt='loading_circle'
-							/>
+							<img src='/img/loading_circle.gif' alt='loading_circle' />
 						</div>
 					)}
 				</div>
