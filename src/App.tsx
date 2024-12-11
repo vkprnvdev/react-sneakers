@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Route } from 'react-router-dom'
 import { Delete } from 'lucide-react'
 import Card from './components/Card'
 import Header from './components/Header'
@@ -10,27 +9,19 @@ import { API } from './api.service.js'
 function App() {
 	const [items, setItems] = useState<Items[]>([])
 	const [cartItems, setCartItems] = useState<Items[]>([])
-	const [favoriteItems, setFavoriteItems] = useState<Items[]>([])
 	const [cartOpened, setCartOpened] = useState<boolean>(false)
 	const [searchValue, setSearchValue] = useState<string>('')
 
+	// const api_items = 'https://271ea91daf28a18b.mokky.dev/items/'
+	// const api_cart = 'https://271ea91daf28a18b.mokky.dev/cart/'
+
 	const api_items = new API('https://271ea91daf28a18b.mokky.dev/items/')
 	const api_cart = new API('https://271ea91daf28a18b.mokky.dev/cart/')
-	const api_favorites = new API('https://271ea91daf28a18b.mokky.dev/favorites/')
 
 	useEffect(() => {
 		api_cart.setFromApi(setCartItems)
 		api_items.setFromApi(setItems)
-		api_favorites.setFromApi(setFavoriteItems)
 	}, [])
-
-	favoriteItems.map(favoriteItem => {
-		items.map((item: Items) => {
-			if (item.id === favoriteItem.id) {
-				item.isFavorite = true
-			}
-		})
-	})
 
 	cartItems.map(cartItem => {
 		items.map((item: Items) => {
@@ -40,36 +31,25 @@ function App() {
 		})
 	})
 
-	const onAddToCart = async (
-		obj: Items,
-		isAdded: boolean,
-		isLoading: Function
-	) => {
+	const onAddToCart = (obj: Items, isAdded: boolean) => {
 		if (!isAdded) {
-			isLoading(true)
 			setCartItems(prev => [...prev, obj])
-			await api_cart.post(obj)
-			isLoading(false)
+			api_cart.post(obj)
 		} else {
-			isLoading(true)
 			setCartItems(prev =>
 				prev.map(item =>
 					item.id === obj.id ? { ...item, count: item.count + 1 } : item
 				)
 			)
-			await api_cart.patch(obj.id, { count: obj.count + 1 })
-			isLoading(false)
+			api_cart.patch(obj.id, { count: obj.count + 1 })
 		}
 	}
 
-	const onRemoveFromCart = async (obj: Items, isLoading: Function) => {
+	const onRemoveFromCart = (obj: Items) => {
 		if (obj.count === 1) {
-			isLoading(true)
 			setCartItems(prev => prev.filter(item => item.id !== obj.id))
-			await api_cart.delete(obj.id)
-			isLoading(false)
+			api_cart.delete(obj.id)
 		} else {
-			isLoading(true)
 			setCartItems(prev =>
 				prev.map(item =>
 					item.id === obj.id ? { ...item, count: item.count - 1 } : item
@@ -80,16 +60,7 @@ function App() {
 					item.id === obj.id ? { ...item, count: item.count - 1 } : item
 				)
 			)
-			await api_cart.patch(obj.id, { count: obj.count - 1 })
-			isLoading(false)
-		}
-	}
-
-	const onFavoriteCard = (obj: Items, isFavorite: boolean) => {
-		if (!isFavorite) {
-			api_favorites.post(obj)
-		} else {
-			api_favorites.delete(obj.id)
+			api_cart.patch(obj.id, { count: obj.count - 1 })
 		}
 	}
 
@@ -97,11 +68,12 @@ function App() {
 		<>
 			<div className='wrapper'>
 				{cartOpened && (
-					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
+					<Drawer
+						onClose={() => setCartOpened(false)}
+						items={cartItems}
+					/>
 				)}
 				<Header onCart={() => setCartOpened(true)} />
-
-				{/* <Route path='react-sneakers/favorites'><h1>1234</h1></Route> */}
 
 				<div className='content'>
 					<div className='filter'>
@@ -147,16 +119,11 @@ function App() {
 									price={item.price}
 									imageUrl={item.imageUrl}
 									countItem={item.count}
-									isFavoriteItem={item.isFavorite}
-									onFavorite={(obj: Items, isFavorite: boolean) =>
-										onFavoriteCard(obj, isFavorite)
+									onFavorite={() => console.log(cartItems)}
+									onPlus={(obj: Items, isAdded: boolean) =>
+										onAddToCart(obj, isAdded)
 									}
-									onPlus={(obj: Items, isAdded: boolean, isLoading: Function) =>
-										onAddToCart(obj, isAdded, isLoading)
-									}
-									onMinus={(obj: Items, isLoading: Function) =>
-										onRemoveFromCart(obj, isLoading)
-									}
+									onMinus={(obj: Items) => onRemoveFromCart(obj)}
 								/>
 							))}
 					</div>
