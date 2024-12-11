@@ -9,19 +9,27 @@ import { API } from './api.service.js'
 function App() {
 	const [items, setItems] = useState<Items[]>([])
 	const [cartItems, setCartItems] = useState<Items[]>([])
+	const [favoriteItems, setFavoriteItems] = useState<Items[]>([])
 	const [cartOpened, setCartOpened] = useState<boolean>(false)
 	const [searchValue, setSearchValue] = useState<string>('')
 
-	// const api_items = 'https://271ea91daf28a18b.mokky.dev/items/'
-	// const api_cart = 'https://271ea91daf28a18b.mokky.dev/cart/'
-
 	const api_items = new API('https://271ea91daf28a18b.mokky.dev/items/')
 	const api_cart = new API('https://271ea91daf28a18b.mokky.dev/cart/')
+	const api_favorites = new API('https://271ea91daf28a18b.mokky.dev/favorites/')
 
 	useEffect(() => {
 		api_cart.setFromApi(setCartItems)
 		api_items.setFromApi(setItems)
+		api_favorites.setFromApi(setFavoriteItems)
 	}, [])
+
+	favoriteItems.map(favoriteItem => {
+		items.map((item: Items) => {
+			if (item.id === favoriteItem.id) {
+				item.isFavorite = true
+			}
+		})
+	})
 
 	cartItems.map(cartItem => {
 		items.map((item: Items) => {
@@ -31,25 +39,36 @@ function App() {
 		})
 	})
 
-	const onAddToCart = (obj: Items, isAdded: boolean) => {
+	const onAddToCart = async (
+		obj: Items,
+		isAdded: boolean,
+		isLoading: Function
+	) => {
 		if (!isAdded) {
+			isLoading(true)
 			setCartItems(prev => [...prev, obj])
-			api_cart.post(obj)
+			await api_cart.post(obj)
+			isLoading(false)
 		} else {
+			isLoading(true)
 			setCartItems(prev =>
 				prev.map(item =>
 					item.id === obj.id ? { ...item, count: item.count + 1 } : item
 				)
 			)
-			api_cart.patch(obj.id, { count: obj.count + 1 })
+			await api_cart.patch(obj.id, { count: obj.count + 1 })
+			isLoading(false)
 		}
 	}
 
-	const onRemoveFromCart = (obj: Items) => {
+	const onRemoveFromCart = async (obj: Items, isLoading: Function) => {
 		if (obj.count === 1) {
+			isLoading(true)
 			setCartItems(prev => prev.filter(item => item.id !== obj.id))
-			api_cart.delete(obj.id)
+			await api_cart.delete(obj.id)
+			isLoading(false)
 		} else {
+			isLoading(true)
 			setCartItems(prev =>
 				prev.map(item =>
 					item.id === obj.id ? { ...item, count: item.count - 1 } : item
@@ -60,7 +79,16 @@ function App() {
 					item.id === obj.id ? { ...item, count: item.count - 1 } : item
 				)
 			)
-			api_cart.patch(obj.id, { count: obj.count - 1 })
+			await api_cart.patch(obj.id, { count: obj.count - 1 })
+			isLoading(false)
+		}
+	}
+
+	const onFavoriteCard = (obj: Items, isFavorite: boolean) => {
+		if (!isFavorite) {
+			api_favorites.post(obj)
+		} else {
+			api_favorites.delete(obj.id)
 		}
 	}
 
@@ -68,13 +96,9 @@ function App() {
 		<>
 			<div className='wrapper'>
 				{cartOpened && (
-					<Drawer
-						onClose={() => setCartOpened(false)}
-						items={cartItems}
-					/>
+					<Drawer onClose={() => setCartOpened(false)} items={cartItems} />
 				)}
 				<Header onCart={() => setCartOpened(true)} />
-
 				<div className='content'>
 					<div className='filter'>
 						<h1>
@@ -119,11 +143,16 @@ function App() {
 									price={item.price}
 									imageUrl={item.imageUrl}
 									countItem={item.count}
-									onFavorite={() => console.log(cartItems)}
-									onPlus={(obj: Items, isAdded: boolean) =>
-										onAddToCart(obj, isAdded)
+									isFavoriteItem={item.isFavorite}
+									onFavorite={(obj: Items, isFavorite: boolean) =>
+										onFavoriteCard(obj, isFavorite)
 									}
-									onMinus={(obj: Items) => onRemoveFromCart(obj)}
+									onPlus={(obj: Items, isAdded: boolean, isLoading: Function) =>
+										onAddToCart(obj, isAdded, isLoading)
+									}
+									onMinus={(obj: Items, isLoading: Function) =>
+										onRemoveFromCart(obj, isLoading)
+									}
 								/>
 							))}
 					</div>

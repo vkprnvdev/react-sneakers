@@ -9,6 +9,7 @@ interface ICard {
 	imageUrl: string
 	price: number
 	countItem: number
+	isFavoriteItem: boolean
 	onPlus: Function
 	onMinus: Function
 	onFavorite: Function
@@ -20,6 +21,7 @@ const Card: FC<ICard> = ({
 	imageUrl,
 	price,
 	countItem,
+	isFavoriteItem,
 	onPlus,
 	onMinus,
 	onFavorite,
@@ -28,36 +30,38 @@ const Card: FC<ICard> = ({
 	const [count, setCount] = useState<number>(1)
 	const [isFavorite, setIsFavorite] = useState(false)
 	const [isPhotoOpened, setIsPhotoOpened] = useState(false)
+	const [loading, isLoading] = useState(false)
 
 	useEffect(() => {
 		if (countItem > 0) {
 			setIsAdded(true)
 			setCount(countItem)
 		}
+		setIsFavorite(isFavoriteItem)
 	}, [])
 
 	const onFirstClickPlus = () => {
-		onPlus({ id, title, imageUrl, price, count }, isAdded)
+		onPlus({ id, title, imageUrl, price, count }, isAdded, isLoading)
 		setIsAdded(!isAdded)
 	}
 
 	const onClickPlus = () => {
 		setCount(prev => prev + 1)
-		onPlus({ id, title, imageUrl, price, count }, isAdded)
+		onPlus({ id, title, imageUrl, price, count }, isAdded, isLoading)
 	}
 
 	const onLastClickMinus = () => {
 		setIsAdded(!isAdded)
-		onMinus({ id, title, imageUrl, price, count })
+		onMinus({ id, title, imageUrl, price, count }, isLoading)
 	}
 
 	const onClickMinus = () => {
 		setCount(prev => prev - 1)
-		onMinus({ id, title, imageUrl, price, count })
+		onMinus({ id, title, imageUrl, price, count }, isLoading)
 	}
 
 	const onClickFavorite = () => {
-		onFavorite()
+		onFavorite({ id, title, imageUrl, price }, isFavorite)
 		setIsFavorite(!isFavorite)
 	}
 
@@ -97,23 +101,32 @@ const Card: FC<ICard> = ({
 						<span>Цена:</span>
 						<b>{price} руб.</b>
 					</div>
-					<div className={styles.btn}>
-						{isAdded ? (
-							<span>
-								<div onClick={count === 1 ? onLastClickMinus : onClickMinus}>
-									<Minus color='#9B9B9B' />
+					{!loading ? (
+						<div className={styles.btn}>
+							{isAdded ? (
+								<span>
+									<div onClick={count === 1 ? onLastClickMinus : onClickMinus}>
+										<Minus color='#9B9B9B' />
+									</div>
+									<h3>{count}</h3>
+									<div onClick={onClickPlus}>
+										<Plus color='#9B9B9B' />
+									</div>
+								</span>
+							) : (
+								<div className={styles.addCard} onClick={onFirstClickPlus}>
+									<Plus color='#CDCDCD' />
 								</div>
-								<h3>{count}</h3>
-								<div onClick={onClickPlus}>
-									<Plus color='#9B9B9B' />
-								</div>
-							</span>
-						) : (
-							<div className={styles.addCard} onClick={onFirstClickPlus}>
-								<Plus color='#CDCDCD' />
-							</div>
-						)}
-					</div>
+							)}
+						</div>
+					) : (
+						<div>
+							<img
+								src='/react-sneakers/img/loading_circle.gif'
+								alt='loading_circle'
+							/>
+						</div>
+					)}
 				</div>
 			</div>
 		</>
