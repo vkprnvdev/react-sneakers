@@ -6,6 +6,8 @@ import Header from '../components/Header/index.js'
 import Drawer from '../components/Drawer/index.js'
 import { Items } from '../app.interface.js'
 import { API } from '../api.service.js'
+import { useQuery } from '@tanstack/react-query'
+import { sneakersService } from '../sneakers.service.js'
 
 export const Route = createLazyFileRoute('/')({
 	component: Index,
@@ -21,6 +23,25 @@ function Index() {
 	const api_items = new API('https://271ea91daf28a18b.mokky.dev/items/')
 	const api_cart = new API('https://271ea91daf28a18b.mokky.dev/cart/')
 	const api_favorites = new API('https://271ea91daf28a18b.mokky.dev/favorites/')
+
+	const sneakers = useQuery({
+		queryKey: ['sneakers'],
+		queryFn: () => sneakersService.getData(),
+		select: data => data.data,
+	})
+
+	useEffect(() => {
+		if (sneakers.isSuccess) {
+			console.log('Success')
+			setItems(sneakers.data)
+		}
+	}, [sneakers.isSuccess, sneakers.data])
+
+	useEffect(() => {
+		if (sneakers.isError) {
+			console.log('Error')
+		}
+	}, [sneakers.isError])
 
 	useEffect(() => {
 		api_cart.setFromApi(setCartItems)
