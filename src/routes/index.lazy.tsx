@@ -112,11 +112,7 @@ function Index() {
 								: 'Все кроссовки'}
 						</h1>
 						<div className='searchBlock'>
-							<img
-								width={20}
-								src='/img/search.svg'
-								alt='Search'
-							/>
+							<img width={20} src='/img/search.svg' alt='Search' />
 							<input
 								onChange={event => setSearchValue(event.target.value)}
 								value={searchValue}
